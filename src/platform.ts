@@ -210,6 +210,11 @@ export class ElectroluxDevicesPlatform implements DynamicPlatformPlugin {
     }
 
     async pollStatus() {
+        // Force refresh 5 minutes before expiration
+        if (Date.now() > this.tokenExpirationDate - 300 * 1000) {
+                await this.refreshAccessToken();
+        }
+
         try {
             this.log.info('Polling appliances status...');
 
